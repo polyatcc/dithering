@@ -3,4 +3,4 @@ project(kgig_3_lab)
 
 set(CMAKE_CXX_STANDARD 14)
 
-add_executable(kgig_3_lab main.cpp dithering.cpp)
+add_executable(kgig_3_lab main.cpp dithering.cpp dithering.h)

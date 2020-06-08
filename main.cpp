@@ -1,7 +1,7 @@
 #include <iostream>
 #include <math.h>
 #include <vector>
-#include "dithering.cpp"
+#include "dithering.h"
 
 using namespace std;
 
