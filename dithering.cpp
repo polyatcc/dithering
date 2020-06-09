@@ -12,6 +12,8 @@ mt19937 mersenne(rd());
 
 double nearest_col(double pixl, int bit) {
     int k = round(pixl);
+    if (k >= 255) {return 255.;}
+    if (k <= 1) { return 0.;}
     int m = k >> (8 - bit);
     int l = 0;
     for (int i = 0; i < (7 / bit)  + 1; i++) {
@@ -66,7 +68,7 @@ void dithering8(int widht, int height, int bits, double gm, unsigned char** arrp
         for (int j = 0; j < widht; j++) {
             double this_p = tmp[i * widht + j];
             this_p = correction_gamma(this_p, gm);
-            this_p = nearest_col(this_p + 255.0 * (matrix_diz8[i % 8][j % 8]) - 0.5, bits);
+            this_p = nearest_col(this_p + 255.0 / (pow(2, bits) - 1) * (matrix_diz8[i % 8][j % 8]) - 0.5, bits);
             tmp[i * widht + j] = (unsigned char)(gamma_rev(this_p, gm));
         }
     }
@@ -78,7 +80,7 @@ void dith_rand(int widht, int height, int bits, double gm, unsigned char** arrp,
         for (int j = 0; j < widht; j++) {
             double this_p = tmp[i * widht + j];
             this_p = correction_gamma(this_p, gm);
-            this_p = nearest_col(this_p + 255.0 * pow(-1, j) * (double (mersenne()  % 50) / 100.), bits);
+            this_p = nearest_col(this_p + 255.0 / (pow(2, bits) - 1) * pow(-1, j) * (double (mersenne() % 50) / 100.), bits);
             tmp[i * widht + j] = (unsigned char) gamma_rev(this_p, gm);
         }
     }
@@ -88,7 +90,7 @@ double div_error(int i, int j, int widht, double gm, vector<double>& err, int bi
     double this_p = tmp[i * widht + j];
     this_p = correction_gamma(this_p, gm);
     this_p = this_p / 255.0 + err[i * widht + j] / 255.0;
-    this_p = nearest_col(255.0 * this_p, bits);
+    this_p = nearest_col(255.0 / (pow(2, bits) - 1) * this_p, bits);
     auto arr_err = correction_gamma(double(tmp[i * widht + j]), gm) + err[i * widht + j] - this_p;
     tmp[i * widht + j] = (unsigned char)gamma_rev(this_p, gm);
     return arr_err;
