@@ -68,7 +68,7 @@ void dithering8(int widht, int height, int bits, double gm, unsigned char** arrp
         for (int j = 0; j < widht; j++) {
             double this_p = tmp[i * widht + j];
             this_p = correction_gamma(this_p, gm);
-            this_p = nearest_col(this_p + 255.0 / (pow(2, bits) - 1) * (matrix_diz8[i % 8][j % 8]) - 0.5, bits);
+            this_p = nearest_col(this_p + 255.0 / (pow(2, bits) - 1) * (matrix_diz8[i % 8][j % 8] - 0.5), bits);
             tmp[i * widht + j] = (unsigned char)(gamma_rev(this_p, gm));
         }
     }
