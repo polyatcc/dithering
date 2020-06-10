@@ -58,6 +58,8 @@ int main(int argc, char** argv) {
             }
         }
     } else {
+        free(arr_pixels);
+        fclose(input_file);
         cerr << "invalid grad";
         return 1;
     }
