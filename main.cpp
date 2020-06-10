@@ -51,10 +51,10 @@ int main(int argc, char** argv) {
             return 1;
         }
     } else if (grad == 1) {
-        double k = double(256) / widht;
         for (int i = 0; i < height; i++) {
             for (int j = 0; j < widht; j++) {
-                arr_pixels[i * widht + j] = double(k * j), gm;
+                double k = j / double(widht);
+                arr_pixels[i * widht + j] = round(255 * k);
             }
         }
     } else {
