@@ -93,7 +93,7 @@ double div_error(int i, int j, int widht, double gm, vector<double>& err, int bi
     double this_p = tmp[i * widht + j];
     this_p = correction_gamma(this_p, gm);
     this_p = this_p / 255.0 + err[i * widht + j] / 255.0;
-    this_p = nearest_col(255.0 / (pow(2, bits) - 1) * this_p, bits);
+    this_p = nearest_col(255.0 * this_p, bits);
     auto arr_err = correction_gamma(double(tmp[i * widht + j]), gm) + err[i * widht + j] - this_p;
     tmp[i * widht + j] = (unsigned char)gamma_rev(this_p, gm);
     return arr_err;
