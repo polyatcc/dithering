@@ -4,13 +4,13 @@
 #include <cmath>
 #include <stdlib.h>
 #include "dithering.h"
-#include <ctime>
+#include <random>
 
 
 using  namespace std;
-/*
+
 random_device rd;
-mt19937 mersenne(rd());*/
+mt19937 mersenne(rd());
 
 double nearest_col(double pixl, int bit) {
     int k = round(pixl);
@@ -77,13 +77,13 @@ void dithering8(int widht, int height, int bits, double gm, unsigned char** arrp
 }
 
 void dith_rand(int widht, int height, int bits, double gm, unsigned char** arrp, int &grad) {
-    srand(time(nullptr));
     unsigned char* tmp = *arrp;
     for (int i = 0; i < height; i++) {
         for (int j = 0; j < widht; j++) {
             double this_p = tmp[i * widht + j];
             this_p = correction_gamma(this_p, gm);
-            this_p = nearest_col(this_p + 255.0 / (pow(2, bits) - 1) * pow(-1, j) * (double (rand() % 50) / 100.), bits);
+            this_p = nearest_col(this_p + 255.0 / (pow(2, bits) - 1) * (double (mersenne() % 100) / 100. - 0.5), bits);
+
             tmp[i * widht + j] = (unsigned char) gamma_rev(this_p, gm);
         }
     }
@@ -93,7 +93,7 @@ double div_error(int i, int j, int widht, double gm, vector<double>& err, int bi
     double this_p = tmp[i * widht + j];
     this_p = correction_gamma(this_p, gm);
     this_p = this_p / 255.0 + err[i * widht + j] / 255.0;
-    this_p = nearest_col(255.0 * this_p, bits);
+    this_p = nearest_col(255.0 / (pow(2, bits) - 1) * this_p, bits);
     auto arr_err = correction_gamma(double(tmp[i * widht + j]), gm) + err[i * widht + j] - this_p;
     tmp[i * widht + j] = (unsigned char)gamma_rev(this_p, gm);
     return arr_err;
